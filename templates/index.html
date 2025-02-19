@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+
+<head>
+    <!-- Define the document type and character encoding -->
+    <meta charset="UTF-8" />
+    <!-- Ensure proper rendering and touch zooming on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Link to the main stylesheet -->
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css/main.css') }}" />
+    <!-- Include the Tailwind CSS library -->
+    <script src="{{ url_for('static', filename='js/tailwind.js') }}"></script>
+    <!-- Link to the aos stylesheet -->
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css/aos.css') }}" />
+    <!-- title -->
+     <title>Silvara.uz | Biznesni avtomatlashtiramiz</title>
+     <!-- favicon -->
+      <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
+</head>
+
+<body>
+
+    <!-- Main section with a white background -->
+    <section class=" bg-white ">
+        <!-- Header Section -->
+        <header
+            class="fixed inset-x-0 top-0 z-30 mx-auto w-full max-w-screen-md border border-gray-100 bg-white/80 py-3 shadow backdrop-blur-lg md:top-6 md:rounded-3xl lg:max-w-screen-lg">
+            <div class="px-4">
+                <div class="flex items-center justify-center">
+                    <!-- Logo and Website Title -->
+                    <div class="flex shrink-0">
+                        <a aria-current="page" class="flex items-center" href="/">
+                            <!-- Website logo -->
+                            <img src="{{ url_for('static', filename='img/logo.png') }}" width="50px" height="50px" alt="" srcset="">
+                            <!-- Screen-reader only text for accessibility -->
+                            <p class="sr-only">Website Title</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <div class="relative isolate px-6 pt-14 lg:px-8" >
+            <!-- Background blur effect -->
+            <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+                aria-hidden="true">
+                <div class="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-linear-to-tr from-[var(--color-primary)] to-[var(--color-secondary)] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+                    style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)">
+                </div>
+            </div>
+            <!-- Main content of the hero section -->
+            <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56" data-aos="zoom-out-up" data-aos-duration="700">
+                <!-- Announcement banner -->
+                <div class="hidden sm:mb-8 sm:flex sm:justify-center">
+                    <div
+                        class="relative rounded-full px-3 py-1 text-sm/6 text-yellow-600 ring-1 ring-yellow-900/10 hover:ring-yellow-900/20">
+                        *Sayt test rejimida ishlamoqda.
+                    </div>
+                </div>
+                <!-- Hero text and call-to-action buttons -->
+                <div class="text-center">
+                    <h1 class="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">Siz rivojlaning, biz avtomatlashtiramiz!</h1>
+                    <!-- <p class="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">Anim aute id magna aliqua
+                        ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam
+                        occaecat.</p> -->
+                    <div class="mt-10 flex items-center justify-center gap-x-6">
+                        <a href="https://www.t.me/silvara_uz"
+                            class="rounded-md bg-[var(--color-primary)] px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-[var(--color-tertiary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Bog'lanish</a>
+                        <!-- <a href="#" class="text-sm/6 font-semibold text-gray-900">Learn more <span
+                                aria-hidden="true">→</span></a> -->
+                    </div>
+                </div>
+            </div>
+            <!-- Background blur effect at the bottom -->
+            <div class="absolute inset-x-0 top-[calc(100%-5rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+                aria-hidden="true">
+                <div class="relative left-[calc(50%+3rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 bg-linear-to-tr from-[var(--color-primary)] to-[var(--color-secondary)] opacity-100 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+                    style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Include the AOS library -->
+    <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+    <!-- Initialize the AOS library -->
+    <script>
+        AOS.init();
+    </script>
+    
+</body>
+
+</html>
