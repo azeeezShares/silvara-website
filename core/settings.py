@@ -25,12 +25,20 @@ SECRET_KEY = 'django-insecure-@@15_)yu@*k$bv08a%t*wa(tcks^h06qdwtj(^t7z^1_9w32&^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['silvara.uz', 'www.silvara.uz', 'fillright.silvara.uz']
+
+# Tell Django where to find the host patterns
+ROOT_HOSTCONF = 'core.hosts'  # Change 'core' to your project name
+
+# Set the default subdomain (this should match a name in hosts.py)
+DEFAULT_HOST = 'www'
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django_hosts', # for andling subdomain
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +52,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware', # for andling subdomain
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'django_hosts.middleware.HostsResponseMiddleware', # for andling subdomain
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -58,7 +70,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR/'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
