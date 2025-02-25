@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@@15_)yu@*k$bv08a%t*wa(tcks^h06qdwtj(^t7z^1_9w32&^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['silvara.uz', 'www.silvara.uz', 'fillright.silvara.uz']
+ALLOWED_HOSTS = ['silvara.uz', 'www.silvara.uz', 'fillright.silvara.uz', 'www.fillright.silvara.uz']
 
 # Tell Django where to find the host patterns
 ROOT_HOSTCONF = 'core.hosts'  # Change 'core' to your project name
