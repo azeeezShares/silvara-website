@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 import telebot, dotenv
-from .bots.student_group import bot
+from .bots.student_group.bot import bot
 
 from .models import Lead
 
