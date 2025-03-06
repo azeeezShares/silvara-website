@@ -33,6 +33,8 @@ ROOT_HOSTCONF = 'core.hosts'  # Change 'core' to your project name
 # Set the default subdomain (this should match a name in hosts.py)
 DEFAULT_HOST = 'www'
 
+TELEGRAM_BOT_TOKEN = "7602818612:AAGxS78mWnKjcT7JRlNKqyzf19PzaSQqelA"
+WEBHOOK_URL = f"https://fillright.silvara.com/webhook/{TELEGRAM_BOT_TOKEN}/"
 
 # Application definition
 

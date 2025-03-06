@@ -1,7 +1,14 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+
+import telebot, dotenv
+from .bots.student_group import bot
 
 from .models import Lead
+
+dotenv.load_dotenv(settings.BASE_DIR / '.env')
 
 def home(request):
     return HttpResponse("Hello, World! Welcome to fillright.silvara.uz")
@@ -65,3 +72,17 @@ def admin_lead_detail(request, lead_id):
 def custom_admin_logout(request):
     request.session.pop("admin_authenticated", None)  # Admin sessiyasini o‘chiramiz
     return redirect("custom_admin_login")
+
+
+@csrf_exempt
+def webhook(request, token):
+    if token != settings.TELEGRAM_BOT_TOKEN:
+        return JsonResponse({"error": "Invalid token"}, status=403)
+
+    if request.method == "POST":
+        json_str = request.body.decode("UTF-8")
+        update = telebot.types.Update.de_json(json_str)
+        bot.process_new_updates([update])
+        return JsonResponse({"status": "ok"})
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
