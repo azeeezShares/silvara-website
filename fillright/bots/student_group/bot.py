@@ -9,7 +9,7 @@ from telebot.storage import StateMemoryStorage
 from telebot.states.sync.context import StateContext
 from .tools.db import get_all_groups, create_subject, get_all_subjects, get_all_users, check_user_role, create_group
 from telebot.types import  Message, ReplyKeyboardMarkup, KeyboardButton,ReplyParameters, ReplyKeyboardRemove
-from tools.states import UserStates, AdminStates, AdminNewGroupStates, AdminNewSubjectStates
+from .tools.states import UserStates, AdminStates, AdminNewGroupStates, AdminNewSubjectStates
 # from telebot.states.sync.middleware import StateMiddleware
 
 # load dotenv
