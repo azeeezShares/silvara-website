@@ -42,6 +42,8 @@ def create_group(conn: connection, name:str, quota: int):
     conn.commit()
     cur.close()
     conn.close()
+    
+    
 
 
 def assign_student_and_subjects(conn: connection, group_id, student_ids, subject_ids):

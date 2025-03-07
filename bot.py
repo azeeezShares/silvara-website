@@ -1,19 +1,18 @@
 import os
 import telebot
 import psycopg2
-from django.conf import settings
 
 from dotenv import load_dotenv
 from telebot import custom_filters
 from telebot.storage import StateRedisStorage
 from telebot.states.sync.context import StateContext
-from .tools.db import get_all_groups, create_subject, get_all_subjects, get_all_users, check_user_role, create_group
+from tools.db import get_all_groups, create_subject, get_all_subjects, get_all_users, check_user_role, create_group
 from telebot.types import  Message, ReplyKeyboardMarkup, KeyboardButton,ReplyParameters, ReplyKeyboardRemove
-from .tools.states import UserStates, AdminStates, AdminNewGroupStates, AdminNewSubjectStates
+from tools.states import UserStates, AdminStates, AdminNewGroupStates, AdminNewSubjectStates
 # from telebot.states.sync.middleware import StateMiddleware
 
 # load dotenv
-load_dotenv(settings.BASE_DIR/'.env')
+load_dotenv('.env')
 
 
 
@@ -130,7 +129,7 @@ def admin_create_group(message: Message, state: StateContext):
     state.set(AdminNewGroupStates.new_group_name)
     state.bot.send_message(
         message.chat.id,
-        "Menga yangi gutuh uchun nom yuboring.",
+        "Menga yangi guruh uchun nom yuboring.",
         reply_parameters=ReplyParameters(message.id),
         reply_markup=ReplyKeyboardRemove()
     )
@@ -159,7 +158,7 @@ def admin_new_group_quota(message: Message, state: StateContext):
     with state.data() as data:
         name = data.get("name")
         quota = int(message.text)
-        create_group(name, quota)
+        create_group(get_db_connection(),name, quota)
     
     
     state.bot.send_message(
@@ -178,12 +177,15 @@ def admin_new_group_quota(message: Message, state: StateContext):
 # Groups list
 @bot.message_handler(text=['Guruhlar ro\'yhati', ])
 def view_groups(message: Message, state: StateContext):
-    bot.send_message(
-            message.chat.id,
-            '\n'.join(["%s. <b>%s</b>. Kvota: %d" % i for i in get_all_groups(get_db_connection())]),
-            reply_parameters=ReplyParameters(message.id),
-            parse_mode="HTML",
-        )
+    groups = get_all_groups(get_db_connection())
+    if groups:
+        bot.send_message(
+                message.chat.id,
+                '\n'.join(["%s. <b>%s</b>. Kvota: %d" % i for i in groups]),
+                reply_parameters=ReplyParameters(message.id),
+                parse_mode="HTML",
+            )
+    else : bot.send_message(message.chat.id, "Hech qanday gruhlar mavjud emas.")
     
     return
 # Groups list end
@@ -262,17 +264,6 @@ def send_student_menu(message):
     keyboard.add(KeyboardButton("Leave Group"))
     bot.send_message(message.chat.id, "Student Menu:", reply_markup=keyboard)
 
-@bot.message_handler(state=UserStates.student_menu, text=["Guruhlar ro'yhati", ])
-def view_groups(message):
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT name FROM groups")
-    groups = cur.fetchall()
-    cur.close()
-    conn.close()
-    
-    group_list = "\n".join([g[0] for g in groups]) if groups else "No groups available."
-    bot.send_message(message.chat.id, f"Available Groups:\n{group_list}")
 
 
 # Add custom filters
@@ -284,3 +275,5 @@ bot.add_custom_filter(custom_filters.TextMatchFilter())
 from telebot.states.sync.middleware import StateMiddleware
 
 bot.setup_middleware(StateMiddleware(bot))
+
+bot.infinity_polling()
