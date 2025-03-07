@@ -5,7 +5,7 @@ from django.conf import settings
 
 from dotenv import load_dotenv
 from telebot import custom_filters
-from telebot.storage import StateMemoryStorage
+from telebot.storage import StateRedisStorage
 from telebot.states.sync.context import StateContext
 from .tools.db import get_all_groups, create_subject, get_all_subjects, get_all_users, check_user_role, create_group
 from telebot.types import  Message, ReplyKeyboardMarkup, KeyboardButton,ReplyParameters, ReplyKeyboardRemove
@@ -19,7 +19,7 @@ load_dotenv(settings.BASE_DIR/'.env')
 
 # Bot Token
 TOKEN = os.getenv("BOT_TOKEN")
-state_storage = StateMemoryStorage()
+state_storage = StateRedisStorage(host='localhost', port=6379, db=0)
 bot = telebot.TeleBot(TOKEN, state_storage=state_storage, use_class_middlewares=True, parse_mode="HTML")
 
 # Database Connection
