@@ -14,5 +14,5 @@ urlpatterns = [
     
     path("admin/leads/<int:lead_id>/", admin_lead_detail, name="admin_lead_detail"),
     
-    path(f'webhook/{settings.TELEGRAM_BOT_TOKEN}/', webhook, name='webhook'),
+    path(f'webhook/<str:token>/', webhook, name='webhook'),
 ]

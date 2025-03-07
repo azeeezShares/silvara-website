@@ -34,7 +34,7 @@ ROOT_HOSTCONF = 'core.hosts'  # Change 'core' to your project name
 DEFAULT_HOST = 'www'
 
 TELEGRAM_BOT_TOKEN = "7602818612:AAGxS78mWnKjcT7JRlNKqyzf19PzaSQqelA"
-WEBHOOK_URL = f"https://fillright.silvara.com/webhook/{TELEGRAM_BOT_TOKEN}/"
+WEBHOOK_URL = f"https://fillright.silvara.uz/webhook/{TELEGRAM_BOT_TOKEN}/"
 
 # Application definition
 
