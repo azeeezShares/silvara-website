@@ -7,6 +7,10 @@ class UserStates(StatesGroup):
     admin_menu = State()
     student_menu = State()
 
+class StudentJoinGroupStates(StatesGroup):
+    view_group = State()
+    select_group = State()
+
 class AdminStates(StatesGroup):
     new_user_username = State()
     new_user_password = State()
@@ -23,3 +27,8 @@ class AdminNewSubjectStates(StatesGroup):
 class AdminAssignStudentAndSubject(StatesGroup):
     assign_student_name = State()
     assign_subject_name = State()
+
+class AdminAssignSubjectStates(StatesGroup):
+    view_group = State()
+    select_group = State()
+    select_subject = State()
