@@ -2,6 +2,10 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.views import View
+import cv2
+import pytesseract
+
 
 import telebot, dotenv
 from .bots.student_group.bot import bot
@@ -10,12 +14,55 @@ from .models import Lead
 
 dotenv.load_dotenv(settings.BASE_DIR / '.env')
 
-def home(request):
-    return HttpResponse("Hello, World! Welcome to fillright.silvara.uz")
+class HomePageView(View):
+    template_name = 'fillright/text_detector/upload.html'
+    
+    def get(self, request):
+        return render(request, self.template_name)
+    
+    def post(self, request):
+        # Formdan ma'lumotlarni olish
+        img = request.FILES.get('img')
+        
+        # Agar fayl yuklangan bo'lsa, uni saqlash
+        if img:
+            # Faylni saqlash
+            extension = os.path.splitext(img.name)[1]  # Fayl kengaytmasini aniqlash
+            unique_filename = f"{uuid.uuid4()}{extension}"
+            file_path = f'fillright/text_detector/{unique_filename}'  # Fayl yo'lini saqlash
+            with open(file_path, 'wb+') as destination:
+                for chunk in img.chunks():
+                    destination.write(chunk)
+                    
+        if file_path:
+            # Load the image
+            image = cv2.imread(file_path)
+
+            if image is None:
+                print("Error: Image not found or path is incorrect.")
+                return redirect('fillright_home')
+
+            # Convert to grayscale
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+            # Optional: Thresholding to improve OCR accuracy
+            gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+
+            # OCR
+            text = pytesseract.image_to_string(gray)
+
+            print("=== Extracted Text ===")
+            os.remove(file_path)
+            return render(request, 'fillright/text_detector/result.html', context={'text': text})
+            
+        # Formani qayta yuklash
+        return redirect('fillright_home')
 
 
 from django.shortcuts import render, redirect
 from .models import Lead
+import uuid
+import os
 
 def lead_form(request):
     if request.method == "POST":
