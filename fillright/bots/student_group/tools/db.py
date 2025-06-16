@@ -4,33 +4,56 @@ from psycopg2.extensions import connection
 
 def check_user_role(conn: connection, username: str, password: str):
     cur = conn.cursor()
-    cur.execute("SELECT id, role FROM users WHERE username=%s AND password=%s", (username, password))
+    cur.execute(
+        "SELECT id, role FROM users WHERE username=%s AND password=%s", (username, password))
     user = cur.fetchone()
     cur.close()
     conn.close()
-    
-    if user: return ('admin', user[0]) if user[1] == 'admin' else ('student', user[0])
-    else: return False
+
+    if user:
+        return ('admin', user[0]) if user[1] == 'admin' else ('student', user[0])
+    else:
+        return False
+
 
 def get_all_users(conn: connection, role: str):
     try:
         cur = conn.cursor()
-        
+
         # SQL query to get all users
         query = "SELECT id, username, role, name FROM users WHERE role = %s;"
         cur.execute(query, (role,))
-        
+
         # Fetch all users
         users = cur.fetchall()
-        
+
         # Close connection
         cur.close()
         conn.close()
-        
+
         return users  # Return list of users
 
     except psycopg2.Error as e:
         return []
+
+
+def get_users_by_group_id(conn: connection, group_id: int):
+    try:
+        cur = conn.cursor()
+        query = """
+                    SELECT u.id, u.username, u.role, u.name
+                    FROM users u
+                    JOIN group_students gs ON u.id = gs.user_id
+                    WHERE gs.group_id = %s;
+                """
+        cur.execute(query, (group_id,))
+        users = cur.fetchall()
+        cur.close()
+        conn.close()
+        return users
+    except psycopg2.Error:
+        return []
+
 
 def get_user_by_id(conn: connection, user_id):
     cur = conn.cursor()
@@ -48,6 +71,7 @@ def get_user_by_id(conn: connection, user_id):
 
     return subject  # Return subject
 
+
 def create_subject(conn: connection, name: str):
     try:
         cur = conn.cursor()
@@ -62,7 +86,8 @@ def create_subject(conn: connection, name: str):
     except Exception as e:
         return False
 
-def get_all_subjects(conn:connection, ):
+
+def get_all_subjects(conn: connection, ):
     cur = conn.cursor()
 
     # SQL query to get all groups
@@ -78,7 +103,8 @@ def get_all_subjects(conn:connection, ):
 
     return groups  # Return list of groups
 
-def get_subject_by_id(conn: connection, subject_id:int):
+
+def get_subject_by_id(conn: connection, subject_id: int):
     cur = conn.cursor()
 
     # SQL query to get all subjects
@@ -94,15 +120,17 @@ def get_subject_by_id(conn: connection, subject_id:int):
 
     return subject  # Return subject
 
-def create_group(conn: connection, name:str, quota: int):
+
+def create_group(conn: connection, name: str, quota: int):
     cur = conn.cursor()
-    
+
     query = "INSERT INTO groups (name, quota) VALUES (%s, %s) RETURNING id;"
     cur.execute(query, (name, quota))
-    
+
     conn.commit()
     cur.close()
     conn.close()
+
 
 def get_all_groups(conn: connection):
     cur = conn.cursor()
@@ -120,7 +148,8 @@ def get_all_groups(conn: connection):
 
     return groups  # Return list of groups
 
-def get_group_by_id(conn: connection, group_id:int):
+
+def get_group_by_id(conn: connection, group_id: int):
     cur = conn.cursor()
 
     # SQL query to get all groups
@@ -135,6 +164,7 @@ def get_group_by_id(conn: connection, group_id:int):
     conn.close()
 
     return group  # Return group
+
 
 def assign_student_and_subjects(conn: connection, group_id, student_ids, subject_ids):
     try:
@@ -155,23 +185,26 @@ def assign_student_and_subjects(conn: connection, group_id, student_ids, subject
         # Close connection
         cur.close()
         conn.close()
-        
+
     except psycopg2.Error as e:
         print("Database error:", e)
+
 
 def get_assigments(conn: connection, group_id):
     subjects = []
     students = []
-    
+
     cur = conn.cursor()
-    
-    cur.execute("SELECT subject_id FROM group_subjects WHERE group_id=%s", (group_id, ))
+
+    cur.execute(
+        "SELECT subject_id FROM group_subjects WHERE group_id=%s", (group_id, ))
     subjects = cur.fetchall()
-    
-    cur.execute("SELECT user_id FROM group_students WHERE group_id=%s", (group_id, ))
+
+    cur.execute(
+        "SELECT user_id FROM group_students WHERE group_id=%s", (group_id, ))
     students = cur.fetchall()
-    
+
     cur.close()
     conn.close()
-    
+
     return subjects, students
