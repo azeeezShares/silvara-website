@@ -17,6 +17,7 @@ from .tools.db import (
     get_group_by_id, 
     get_subject_by_id,
     get_user_by_id,
+    get_users_by_group_id,
 )
 
 from telebot.types import  (
@@ -441,7 +442,17 @@ def admin_assign_subject_subject(call: CallbackQuery, state: StateContext):
 def join_group_by_students(call: CallbackQuery, state: StateContext):
     
     with state.data() as data:
-        assign_student_and_subjects(get_db_connection(), int(data.get("group_id")), [data.get("student_id"), ], [])
+        group_id = int(data.get("group_id"))
+        student_id = data.get("student_id")
+        group = get_group_by_id(get_db_connection(), group_id)
+        quota = group[2]
+        students = get_users_by_group_id(get_db_connection(), group_id)
+        if len(students) >= quota:
+            bot.send_message(call.message.chat.id, "Kechirasiz, bu guruh to'ldi.")
+            state.set(UserStates.student_menu)
+            send_student_menu(call.message)
+            return
+        assign_student_and_subjects(get_db_connection(), group_id, [student_id], [])
     
     bot.delete_message(call.message.chat.id, call.message.id)
     bot.send_message(call.message.chat.id, "Siz guruhga qo'shildingiz")
